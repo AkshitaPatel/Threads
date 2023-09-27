@@ -1,7 +1,6 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import Image from "next/image";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ThreadValidation } from "@/lib/validations/thread";
 import * as z from "zod";
@@ -16,26 +15,15 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { ChangeEvent, useState } from "react";
 import { Textarea } from "../ui/textarea";
-import { isBase64Image } from "@/lib/utils";
-import { updateUser } from "@/lib/actions/user.actions";
 import { Button } from "../ui/button";
 import { createThread } from "@/lib/actions/thread.actions";
 
 interface Props {
-  user: {
-    id: string;
-    objectId: string;
-    username: string;
-    name: string;
-    bio: string;
-    image: string;
-  };
-  btnTitle: string;
+  userId: string;
 }
 
-function PostThread({ userId }: { userId: string }) {
+function PostThread({ userId }: Props) {
   const router = useRouter();
   const pathname = usePathname();
 
@@ -74,7 +62,7 @@ function PostThread({ userId }: { userId: string }) {
                 Content
               </FormLabel>
               <FormControl className="no-focus border border-dark-4 bg-dark-3 text-light-1">
-                <Textarea rows={50} />
+                <Textarea rows={15} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

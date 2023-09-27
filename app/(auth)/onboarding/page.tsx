@@ -3,7 +3,6 @@ import { currentUser } from "@clerk/nextjs";
 
 async function Page() {
   const user = await currentUser();
-  if (!user) return null; // to avoid typescript warnings
 
   const userInfo = {};
 
