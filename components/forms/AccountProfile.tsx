@@ -7,6 +7,8 @@ import { UserValidation } from "@/lib/validations/user";
 import * as z from "zod";
 import { useUploadThing } from "@/lib/uploadthing";
 
+import { usePathname, useRouter } from "next/navigation";
+
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -21,6 +23,7 @@ import { Input } from "@/components/ui/input";
 import { ChangeEvent, useState } from "react";
 import { Textarea } from "../ui/textarea";
 import { isBase64Image } from "@/lib/utils";
+import { updateUser } from "@/lib/actions/user.actions";
 
 interface Props {
   user: {
@@ -38,6 +41,9 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
   const [files, setFiles] = useState<File[]>([]);
 
   const { startUpload } = useUploadThing("media");
+
+  const router = useRouter();
+  const pathname = usePathname();
 
   const form = useForm({
     resolver: zodResolver(UserValidation),
@@ -86,6 +92,21 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
     }
 
     //TODO: Update User Profile
+
+    await updateUser({
+      username: values.username,
+      name: values.name,
+      bio: values.bio,
+      image: values.profile_photo,
+      userId: user.id,
+      path: pathname,
+    });
+
+    if (pathname === "/profile/edit") {
+      router.back();
+    } else {
+      router.push("/");
+    }
   };
   return (
     <Form {...form}>
@@ -127,6 +148,7 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
                   onChange={(e) => handleImage(e, field.onChange)}
                 />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
