@@ -3,7 +3,7 @@ import { fetchPosts } from "@/lib/actions/thread.actions";
 import { currentUser } from "@clerk/nextjs";
 
 async function Home() {
-  const results = await fetchPosts(1, 2);
+  const results = await fetchPosts(1, 30);
 
   const user = await currentUser();
 
